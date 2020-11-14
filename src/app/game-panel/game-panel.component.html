@@ -1,0 +1,20 @@
+
+<table class='table' *ngIf="square">
+    <tbody>
+        <tr *ngFor="let data of square; let i = index">
+            <td *ngFor="let cell of data;let j = index" style="border: none;" >
+              <img *ngIf="j===selectedShape.locationX && i===selectedShape.locationY " src="/../../assets/img/red.jpg"/>
+              <img *ngIf="cell.fill===true" src="/../../assets/img/red.jpg"/>            
+              <img *ngIf="cell.fill===false" src="/../../assets/img/white.jpg"/>             
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+        <!-- <div  *ngFor="let data of square; let i = index">
+            <a *ngFor="let cell of data"  >     
+                <img *ngIf="cell.fill===true" src="/../../assets/img/red.jpg"/>            
+                <img *ngIf="cell.fill===false" src="/../../assets/img/white.jpg"/>             
+            </a>
+            <br/>
+        </div> -->
