@@ -44,6 +44,22 @@ export class GamePanelComponent implements OnInit {
   }
  drawSquares(){
    //console.log(this.selectedShape.locationY+' ' +this.selectedShape.locationX);
+  //hit bottom
+  let newShape = false;
+  // detect intersect
+    if(this.selectedShape.locationY+1<this.HEIGHT){
+      console.log(this.square[this.selectedShape.locationY+1][this.selectedShape.locationX].painted);
+      if(this.square[this.selectedShape.locationY+1][this.selectedShape.locationX].painted==true
+      || this.square[this.selectedShape.locationY+1][this.selectedShape.locationX+1].painted==true){
+        this.drawSquareShape();
+        console.log('y '+this.selectedShape.locationY);
+        this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].painted=true;
+        this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].painted=true;
+        this.square[this.selectedShape.locationY][this.selectedShape.locationX].painted=true;
+        this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].painted=true;
+        this.selectedShape = new Shape(1);
+      }
+    }
    if(this.selectedShape.type==1){
       this.drawSquareShape();
    }else if(this.selectedShape.type==2){
@@ -51,6 +67,18 @@ export class GamePanelComponent implements OnInit {
    }else{
       
    }
+   if(this.HEIGHT==this.selectedShape.locationY+1){
+    console.log('hit bottom');
+    for(let i=0;i<this.HEIGHT;i++){
+      for(let j=0;j<this.WIDTH;j++){
+        if(this.square[i][j].painted==false && this.square[i][j].fill==true){
+          this.square[i][j].painted = this.square[i][j].fill;
+          console.log('painter');
+        }
+      }
+    }
+    // set squares to be painted ( if it is filled in the shape)
+  }
   }
   drawRightLShape() {
 
@@ -65,8 +93,8 @@ export class GamePanelComponent implements OnInit {
       this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill = this.selectedShape.squares[2][1].fill;
     }else if(this.selectedShape.locationY==2){
 
-      this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill = this.selectedShape.squares[0][0].fill;
       this.square[this.selectedShape.locationY-2][this.selectedShape.locationX+1].fill = this.selectedShape.squares[0][1].fill;
+      this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill = this.selectedShape.squares[0][0].fill;
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill = this.selectedShape.squares[1][0].fill;
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill = this.selectedShape.squares[1][1].fill;
       this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill = this.selectedShape.squares[2][0].fill;
@@ -148,7 +176,10 @@ export class GamePanelComponent implements OnInit {
       if(this.selectedShape.locationY<19){
       this.selectedShape.locationY++;
       this.drawSquares();
-    }
+      }else{
+        this.selectedShape = new Shape(1);
+        this.drawSquares();
+      }
   });
   }
 
@@ -191,7 +222,9 @@ export class Shape{
 export class Square{
   fill: boolean;
   backGround: any;
+  painted:boolean
   constructor(private fillIt:boolean){
     this.fill = fillIt;
+    this.painted=false;
   }
 }
