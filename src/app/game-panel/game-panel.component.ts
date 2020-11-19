@@ -23,13 +23,23 @@ export class GamePanelComponent implements OnInit {
     this.drawSquares();
     // x--i,y--j 
   }
-  onKey(event: any) { // without type info
+  onKey(key: any) { // without type info
     console.log( (this.selectedShape.locationX+1)+'---'+(this.selectedShape.locationY-1));
     console.log( (this.selectedShape.locationX+1)+'---'+this.selectedShape.locationY);
     //move left
-    this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill=false;
-    this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill=false;
-    this.selectedShape.locationX--;
+    if(key=='left'){
+      this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill=false;
+      this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill=false;
+      this.selectedShape.locationX--;
+    }else if(key=='right'){
+      this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill=false;
+      this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill=false;
+      this.selectedShape.locationX++;
+    }else if(key=='down'){
+      this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill=false;
+      this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill=false;
+      this.selectedShape.locationY++;
+    }
     this.drawSquares();
   }
  drawSquares(){

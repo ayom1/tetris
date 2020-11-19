@@ -11,8 +11,7 @@
     </tbody>
 </table>
 <div>
-    <div ><button (keyup)="onKey($event)">Up</button></div>
-    <div><button (keyup)="onKey($event)">Left</button><button (keyup)="onKey($event)">Down</button><button (keyup)="onKey($event)">Right</button></div>
+    <div><button (click)="onKey('left')">Left</button><button (click)="onKey('down')">Down</button><button (click)="onKey('right')">Right</button></div>
 </div>
 
         <!-- <div  *ngFor="let data of square; let i = index">
