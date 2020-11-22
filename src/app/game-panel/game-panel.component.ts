@@ -24,20 +24,43 @@ export class GamePanelComponent implements OnInit {
     // x--i,y--j 
   }
   onKey(key: any) { // without type info
-    console.log( (this.selectedShape.locationX+1)+'---'+(this.selectedShape.locationY-1));
-    console.log( (this.selectedShape.locationX+1)+'---'+this.selectedShape.locationY);
+    console.log( (this.selectedShape.locationY)+'---'+(this.selectedShape.locationX));
     //move left
     if(key=='left'){
-      this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill=false;
-      this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill=false;
+      // can move left?
+      if(this.square[this.selectedShape.locationY][this.selectedShape.locationX-1].painted
+        || this.square[this.selectedShape.locationY-1][this.selectedShape.locationX-1].painted){
+          console.log('can not move left');
+          return;
+      }
+      if(!this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].painted){
+        this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill=false;
+      }
+      if(!this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].painted){
+        this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill=false;
+      }
       this.selectedShape.locationX--;
     }else if(key=='right'){
-      this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill=false;
-      this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill=false;
+      // can move right?
+      if(this.square[this.selectedShape.locationY][this.selectedShape.locationX+2].painted
+        || this.square[this.selectedShape.locationY+1][this.selectedShape.locationX+2].painted){
+          console.log('can not move right');
+          return;
+      }
+      if(!this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].painted){
+        this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill=false;
+      }
+      if(!this.square[this.selectedShape.locationY][this.selectedShape.locationX].painted){
+        this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill=false;
+      }
       this.selectedShape.locationX++;
     }else if(key=='down'){
-      this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill=false;
+      if(this.selectedShape.locationY-2>=0){
+        this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill=false;
+      }
+      if(this.selectedShape.locationY-1>=0){
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill=false;
+      }
       this.selectedShape.locationY++;
     }
     this.drawSquares();
@@ -159,10 +182,18 @@ export class GamePanelComponent implements OnInit {
       this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill = this.selectedShape.squares[1][0].fill;
       this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill = this.selectedShape.squares[1][1].fill;
     }else{
-      this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill = false;
+      if(!this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].painted ){
+        this.square[this.selectedShape.locationY-2][this.selectedShape.locationX].fill = false;
+      }
+      if(!this.square[this.selectedShape.locationY-2][this.selectedShape.locationX+1].painted ){
       this.square[this.selectedShape.locationY-2][this.selectedShape.locationX+1].fill = false;
+      }
+      if(!this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].painted ){
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill = false;
+      }
+      if(!this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].painted ){
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill = false;
+      }
       
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill = this.selectedShape.squares[0][0].fill;
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill = this.selectedShape.squares[0][1].fill;
