@@ -11,6 +11,7 @@ export class GamePanelComponent implements OnInit {
   HEIGHT = 20;
   square : Square[][];
   selectedShape: Shape;
+  score = 0;
   constructor() { 
     this.square = [];
     for(let i=0;i<this.HEIGHT;i++){
@@ -80,7 +81,7 @@ export class GamePanelComponent implements OnInit {
         this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].painted=true;
         this.square[this.selectedShape.locationY][this.selectedShape.locationX].painted=true;
         this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].painted=true;
-        this.selectedShape = new Shape(1);
+        return true;
       }
     }
    if(this.selectedShape.type==1){
@@ -100,8 +101,10 @@ export class GamePanelComponent implements OnInit {
         }
       }
     }
+    return true;
     // set squares to be painted ( if it is filled in the shape)
-  }
+    }
+  return false;
   }
   drawRightLShape() {
 
@@ -206,14 +209,43 @@ export class GamePanelComponent implements OnInit {
 
   ngOnInit(): void {
     interval(500).subscribe(x => {
+      // checkrows all filled?
+      let newShape = false;
       if(this.selectedShape.locationY<19){
       this.selectedShape.locationY++;
-      this.drawSquares();
-      }else{
+      }
+      newShape = this.drawSquares();
+      if(newShape){
+        let checked = this.checkRows(false);
+        if(checked){
+        setTimeout(() => {
+          this.checkRows(true);
+        }, 200);
+        }
         this.selectedShape = new Shape(1);
-        this.drawSquares();
       }
   });
+  }
+  checkRows(checked:boolean) {
+    let rowComplete = false;
+    let hasEarased = false;
+    for(let i=0;i<this.HEIGHT;i++){
+      rowComplete = true;
+      for(let j=0;j<this.WIDTH;j++){
+        rowComplete = rowComplete && this.square[i][j].fill;
+      }
+      if(rowComplete){
+        hasEarased = true;
+        if(checked){
+        this.score +=10;
+        for(let j=0;j<this.WIDTH;j++){
+          this.square[i][j].fill=false;
+          this.square[i][j].painted=false;
+        }
+      }
+      }
+    }
+    return hasEarased;
   }
 
 }
@@ -223,8 +255,10 @@ export class Shape{
   locationX:number;
   locationY:number;
   type:number;
+  moving:boolean;
   constructor(private s:number){
     this.type=s;
+    this.moving=true;
     if(s==1){ // square shape
       this.squares =  [];
       this.squares[0] = [];
