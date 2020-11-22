@@ -42,8 +42,8 @@ export class GamePanelComponent implements OnInit {
       this.selectedShape.locationX--;
     }else if(key=='right'){
       // can move right?
-      if(this.square[this.selectedShape.locationY][this.selectedShape.locationX+2].painted
-        || this.square[this.selectedShape.locationY+1][this.selectedShape.locationX+2].painted){
+      if(this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+2].painted
+        || this.square[this.selectedShape.locationY][this.selectedShape.locationX+2].painted){
           console.log('can not move right');
           return;
       }
@@ -197,13 +197,15 @@ export class GamePanelComponent implements OnInit {
       
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX].fill = this.selectedShape.squares[0][0].fill;
       this.square[this.selectedShape.locationY-1][this.selectedShape.locationX+1].fill = this.selectedShape.squares[0][1].fill;
-      this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill = this.selectedShape.squares[1][0].fill;
-      this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill = this.selectedShape.squares[1][1].fill;
+      if(this.selectedShape.locationY<this.HEIGHT){
+        this.square[this.selectedShape.locationY][this.selectedShape.locationX].fill = this.selectedShape.squares[1][0].fill;
+        this.square[this.selectedShape.locationY][this.selectedShape.locationX+1].fill = this.selectedShape.squares[1][1].fill;
+      }
     }
   }
 
   ngOnInit(): void {
-    interval(1000).subscribe(x => {
+    interval(500).subscribe(x => {
       if(this.selectedShape.locationY<19){
       this.selectedShape.locationY++;
       this.drawSquares();
